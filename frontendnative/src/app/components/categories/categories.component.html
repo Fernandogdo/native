@@ -1,0 +1,61 @@
+<div class="main-content">
+    <div class="container-fluid">
+        <h2>Categorias</h2>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="container" id="formulario">
+                    <div class="col text-center">
+                        <button mat-raised-button class="btnCreaPersonalizado" color="primary"
+                            (click)="ModalCreateCategoria()">
+                            <span class="material-icons">
+                                add_circle_outline
+                            </span>
+                            Crear Categoria
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6 col-sm-6" *ngFor="let category of categorias">
+                <mat-card class="example-card">
+                    <mat-card-header>
+                        <div mat-card-avatar class="example-header-image"></div>
+                        <mat-card-title>{{category.title}}, {{category._id}}</mat-card-title>
+                        <mat-card-subtitle>Dog Breed</mat-card-subtitle>
+                    </mat-card-header>
+                    <!-- <img class="image-product" [src]="'http://localhost:3000/'+ category.imagePath" alt=""> -->
+                    <img mat-card-image [src]="'http://localhost:3000/'+ category.imagePath"
+                        alt="Photo of a Shiba Inu">
+                    <mat-card-content>
+                        <p>
+                            {{category.description}}
+                        </p>
+                    </mat-card-content>
+                    <mat-card-actions>
+                        <button mat-raised-button color="primary"
+                            (click)="ModalCreateProduct(category._id, category.title)"
+                        >
+                            <span class="material-icons">
+                                add_circle_outline
+                            </span>
+                            Producto
+                        </button>
+                        <button mat-raised-button color="primary"
+                            (click)="ModalEditCategory(category._id, category.title, category.description)">
+                            <span class="material-icons">
+                                add_circle_outline
+                            </span>
+                            edit
+                        </button>
+                        <button mat-raised-button color="primary" (click)="deleteCategory(category._id)">
+                            <span class="material-icons">
+                                add_circle_outline
+                            </span>
+                            deete
+                        </button>
+                    </mat-card-actions>
+                </mat-card>
+            </div>
+        </div>
+    </div>
+</div>

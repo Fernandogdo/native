@@ -8,6 +8,7 @@ const ProductSchema = new Schema({
     category: {type: Schema.Types.ObjectId, ref: Category, required: true},
     description: String,
     price: Number,
+    stock: Number,
     imagePath: String
 });
 

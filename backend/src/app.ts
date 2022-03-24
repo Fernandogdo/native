@@ -7,7 +7,7 @@ import cors from 'cors';
 const app = express();
 import indexRoutes  from './routes/index';
 import productRoutes  from './routes/product.routes';
-
+import saleRoutes from './routes/sale.routes';
 
 //settings
 app.set('port', process.env.PORT || 3000)
@@ -20,11 +20,12 @@ app.use(express.json());
 //routes
 app.use('/api', indexRoutes)
 app.use('/api', productRoutes)
+app.use('/api', saleRoutes)
 
 
 
 //this folder for this app will be used to store public files
-app.use('./uploads', express.static(path.resolve('uploads')));
+app.use('/uploads', express.static(path.resolve('uploads')));
 
 
 export default app;
