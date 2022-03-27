@@ -3,15 +3,16 @@
         <h2 class="title-component">Registro de Ventas</h2>
         <div class="row">
             <div class="col-md-12">
-                <mat-card>
-                    <form>
+                <form>
+                    <mat-card class="card-sale">
+
                         <table class="example-full-width" cellspacing="1">
                             <tr>
                                 <td>
                                     <h6>Título</h6>
                                     <mat-form-field appearance="fill">
                                         <input matInput [value]="title" [(ngModel)]="title"
-                                        [ngModelOptions]="{standalone: true}">
+                                            [ngModelOptions]="{standalone: true}">
                                         <mat-hint align="end">Here's the dropdown arrow ^</mat-hint>
                                     </mat-form-field>
                                 </td>
@@ -26,9 +27,10 @@
                                 <td>
                                     <div class="col text-center">
                                         <button mat-raised-button class="btnCreaPersonalizado" color="primary"
+                                            [routerLink]="['/sale']" routerLinkActive="active" *ngIf="disabled"
                                             (click)="postSale()">
                                             <span class="material-icons">
-                                                add_circle_outline
+                                                save
                                             </span>
                                             Registrar Venta
                                         </button>
@@ -36,6 +38,9 @@
                                 </td>
                             </tr>
                         </table>
+                    </mat-card>
+
+                    <mat-card>
                         <table class="example-full-width" cellspacing="1">
                             <tr>
                                 <td>
@@ -75,27 +80,26 @@
                                             <span class="material-icons">
                                                 add_circle_outline
                                             </span>
-                                            Registrar Producto
+                                            Agregar
                                         </button>
                                     </div>
                                 </td>
                             </tr>
                         </table>
-                    </form>
-                </mat-card>
+                    </mat-card>
+                </form>
             </div>
 
 
             <div class="col-md-12">
 
                 <div class="mat-elevation-z8">
-                    
+
 
                     <table mat-table [dataSource]="dataSource">
 
                         <div class="col text-center">
-                            <button mat-raised-button class="btnCreaPersonalizado" color="primary"
-                                (click)="postSale()">
+                            <button mat-raised-button class="btnCreaPersonalizado" color="primary" (click)="postSale()">
                                 <span class="material-icons">
                                     add_circle_outline
                                 </span>
@@ -106,12 +110,12 @@
                         <ng-container matColumnDef="opciones">
                             <th mat-header-cell *matHeaderCellDef> Opciones </th>
                             <td mat-cell *matCellDef="let element">
-                                <button mat-icon-button 
+                                <button mat-icon-button
                                     (click)="deleteElementProducts(element.title, element.price, element.quantity)"
                                     aria-label="Example icon-button with a menu">
                                     <mat-icon>delete</mat-icon>
                                 </button>
-                            
+
                             </td>
                             <td mat-footer-cell *matFooterCellDef>Total</td>
                         </ng-container>
@@ -139,7 +143,8 @@
 
                         <ng-container matColumnDef="total">
                             <th mat-header-cell *matHeaderCellDef> SubTotal </th>
-                            <td mat-cell *matCellDef="let element"> {{element.price * element.quantity | currency}} </td>
+                            <td mat-cell *matCellDef="let element"> {{element.price * element.quantity | currency}}
+                            </td>
                             <td mat-footer-cell *matFooterCellDef>{{getTotalCost() | currency}}</td>
                         </ng-container>
 

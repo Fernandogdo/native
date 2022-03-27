@@ -3,6 +3,9 @@ import { ProductsService } from 'src/app/services/products/products.service';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatTableDataSource} from '@angular/material/table';
 import { Product } from 'src/app/interfaces/Product';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { ModalEditProductComponent } from '../modal-edit-product/modal-edit-product.component';
+
 
 @Component({
   selector: 'app-products',
@@ -13,12 +16,16 @@ export class ProductsComponent implements OnInit {
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
+  dialogEditCategoria: MatDialogRef<ModalEditProductComponent>;
+
+
   displayedColumns: string[] = [ 'image','title', 'category', 'price', 'stock', 'opciones'];
   arregloProductos: Product[] = [];
   dataSource;
 
   constructor(
-    public productsService:ProductsService
+    public productsService:ProductsService,
+    private dialog: MatDialog
   ) { }
 
   ngOnInit(): void {
@@ -47,6 +54,25 @@ export class ProductsComponent implements OnInit {
       console.log("eliminar Prouct", res)
       this.getProducts()
     })
+  }
+
+
+  ModalEditCategory(id, title, category, description, price, stock){
+    this.dialogEditCategoria = this.dialog.open(ModalEditProductComponent, {
+      data: {
+        idProduct: id,
+        title: title,
+        category: category,
+        description: description,
+        price: price,
+        stock: stock
+        // img: img
+      }
+    });
+    this.dialogEditCategoria.afterClosed().subscribe(()=> {
+      this.getProducts();
+    });
+
   }
 
 

@@ -40,7 +40,7 @@ export class DetailSaleComponent implements OnInit {
   }
 
   getSail() {
-    this.salesService.getProduct(this.idSale).subscribe((res) => {
+    this.salesService.getSale(this.idSale).subscribe((res) => {
       // console.log("DetailSale", res)
       this.sale = res;
       this.productsSale = this.sale.products;

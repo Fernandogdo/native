@@ -1,0 +1,40 @@
+.btnCreaPersonalizado {
+    margin-top: 15px;
+    background-color: #003f72;
+}
+
+.example-card {
+    margin-top: 20px;
+    max-width: 400px;
+    cursor: pointer;
+}
+
+.example-card:hover {
+    border: 1px solid #333;
+}
+
+.example-header-image {
+    background-image: url("../../../assets/img/native-white.jpeg");
+    background-size: cover;
+}
+
+
+.botones{
+    margin: 10px;
+}
+
+
+// img{
+//     width: 100%;
+// }
+.img-product{
+    // width: 100%;
+    max-height: 10%;
+}
+#btn-editar{
+    background: rgba(100, 99, 99, 0.514);
+}
+
+#btn-visibility {
+    background: #abd37c;
+}

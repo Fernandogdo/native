@@ -16,43 +16,48 @@
                 </div>
             </div>
 
-            <div class="col-lg-3 col-md-6 col-sm-6" *ngFor="let category of categorias">
-                <mat-card class="example-card">
+            <div class="col-lg-3 col-md-6 col-sm-6" *ngFor="let category of categorias" [routerLink]="['/view-products-category/', category.title ]" routerLinkActive="active">
+                <mat-card  class="card-" >
                     <mat-card-header>
                         <div mat-card-avatar class="example-header-image"></div>
-                        <mat-card-title>{{category.title}}, {{category._id}}</mat-card-title>
+                        <mat-card-title>{{category.title}}</mat-card-title>
                         <mat-card-subtitle>Dog Breed</mat-card-subtitle>
                     </mat-card-header>
                     <!-- <img class="image-product" [src]="'http://localhost:3000/'+ category.imagePath" alt=""> -->
-                    <img mat-card-image [src]="'http://localhost:3000/'+ category.imagePath"
-                        alt="Photo of a Shiba Inu">
+                    <img class="img-category" mat-card-image [src]="'http://localhost:3000/'+ category.imagePath" alt="Photo of a Shiba Inu">
                     <mat-card-content>
                         <p>
                             {{category.description}}
                         </p>
                     </mat-card-content>
                     <mat-card-actions>
-                        <button mat-raised-button color="primary"
-                            (click)="ModalCreateProduct(category._id, category.title)"
-                        >
+                        <button mat-fab class="botones" color="primary"
+                            (click)="ModalCreateProduct(category._id, category.title)">
                             <span class="material-icons">
                                 add_circle_outline
                             </span>
-                            Producto
+                            <!-- Producto -->
                         </button>
-                        <button mat-raised-button color="primary"
+                        <button mat-fab class="botones" id="btn-editar"
                             (click)="ModalEditCategory(category._id, category.title, category.description)">
                             <span class="material-icons">
-                                add_circle_outline
+                                edit
                             </span>
-                            edit
+                            <!-- edit -->
                         </button>
-                        <button mat-raised-button color="primary" (click)="deleteCategory(category._id)">
+                        <button mat-fab class="botones" id="btn-visibility"
+                            [routerLink]="['/view-products-category/', category.title ]" routerLinkActive="active">
+                            <mat-icon>
+                                visibility
+                            </mat-icon>
+                        </button>
+                        <button mat-fab class="botones" color="warn" (click)="deleteCategory(category._id)">
                             <span class="material-icons">
-                                add_circle_outline
+                                delete
                             </span>
-                            deete
+                            <!-- deete -->
                         </button>
+
                     </mat-card-actions>
                 </mat-card>
             </div>

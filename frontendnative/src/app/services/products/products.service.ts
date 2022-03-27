@@ -37,7 +37,7 @@ export class ProductsService {
     return this.http.delete(`${this.URI}/${id}`);
   }
 
-  updateProduct(id: string, objetoEdit:Product) {
+  updateProduct(id: string, objetoEdit) {
     console.log("editandoProducto", id, objetoEdit)
     return this.http.put(`${this.URI}/${id}`, objetoEdit);
   }

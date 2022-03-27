@@ -16,6 +16,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatPaginatorModule } from '@angular/material/paginator'; 
 import { MatSelectModule } from '@angular/material/select'; 
 import {MatGridListModule} from '@angular/material/grid-list'; 
+import {MatSnackBarModule} from '@angular/material/snack-bar'; 
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -33,6 +34,9 @@ import { ProductsComponent } from './components/products/products.component';
 import { SaleComponent } from './components/sale/sale.component';
 import { RegisterSaleComponent } from './components/register-sale/register-sale.component';
 import { DetailSaleComponent } from './components/detail-sale/detail-sale.component';
+import { ModalEditProductComponent } from './components/modal-edit-product/modal-edit-product.component';
+import { ViewProductsCategoryComponent } from './components/view-products-category/view-products-category.component';
+import { UserRegisterComponent } from './components/user-register/user-register.component';
 // import { VentasComponent } from './components/sales/ventas.component';
 // import { DashboardComponent } from './components/dashboard/dashboard.component';
 // import { CategoriesComponent } from './components/categories/categories.component';
@@ -52,6 +56,9 @@ import { DetailSaleComponent } from './components/detail-sale/detail-sale.compon
     ProductsComponent,
     RegisterSaleComponent,
     DetailSaleComponent,
+    ModalEditProductComponent,
+    ViewProductsCategoryComponent,
+    UserRegisterComponent,
     // VentasComponent,
     
     // DashboardComponent,
@@ -74,7 +81,8 @@ import { DetailSaleComponent } from './components/detail-sale/detail-sale.compon
     MatSelectModule,
     MatGridListModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatSnackBarModule
     
   ],
   providers: [],

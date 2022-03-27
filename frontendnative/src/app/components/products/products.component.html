@@ -55,7 +55,7 @@
                                     <mat-icon>settings</mat-icon>
                                 </button>
                                 <mat-menu #menu="matMenu">
-                                    <button mat-menu-item>
+                                    <button mat-menu-item (click)="ModalEditCategory(element._id, element.title, element.category, element.description, element.price, element.stock)">
                                         <mat-icon>edit</mat-icon>
                                         <span>Editar</span>
                                     </button>

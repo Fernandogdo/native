@@ -1,0 +1,52 @@
+<div class="main-content">
+    <div class="container-fluid">
+        <h2>Productos de {{categoryProduct}} </h2>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="container" id="formulario">
+                    <div class="col text-center">
+                        <button mat-raised-button class="btnCreaPersonalizado" color="primary"
+                            [routerLink]="['/categories/']" routerLinkActive="active">
+                            <mat-icon>
+                                undo
+                            </mat-icon>
+                            Regresar
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6 col-sm-6" *ngFor="let productCategory of arrayProductsCategory">
+                <mat-card class="example-card">
+                    <mat-card-header>
+                        <div mat-card-avatar class="example-header-image"></div>
+                        <mat-card-title>{{productCategory.title}} | {{productCategory.price | currency}}
+                        </mat-card-title>
+                        <mat-card-subtitle>{{productCategory.category}}</mat-card-subtitle>
+                    </mat-card-header>
+                    <img mat-card-image class="img-product" [src]="'http://localhost:3000/'+ productCategory.imagePath"
+                        alt="Photo of a Shiba Inu">
+                    <mat-card-content>
+                        <p>
+                            {{productCategory.description}}
+                        </p>
+                    </mat-card-content>
+                    <mat-card-actions>
+
+                        <button mat-fab class="botones" id="btn-editar"
+                            (click)="ModalEditProduct(productCategory._id, productCategory.title, productCategory.category, productCategory.description, productCategory.price, productCategory.stock)">
+                            <span class="material-icons">
+                                edit
+                            </span>
+                        </button>
+                        <button mat-fab class="botones" color="warn">
+                            <span class="material-icons">
+                                delete
+                            </span>
+                        </button>
+                    </mat-card-actions>
+                </mat-card>
+            </div>
+        </div>
+    </div>
+</div>

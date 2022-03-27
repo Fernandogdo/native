@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
-import { Product } from "../../interfaces/Product";
+// import { Sale } from "../../interfaces/Sale";
 import { Global } from '../global/global';
 import { Sale } from 'src/app/interfaces/Sale';
 
@@ -9,7 +9,7 @@ import { Sale } from 'src/app/interfaces/Sale';
 })
 export class SalesService {
 
-  // URI = 'http://localhost:3000/api/products';
+  // URI = 'http://localhost:3000/api/Sales';
 
   public url:string
 
@@ -25,19 +25,19 @@ export class SalesService {
     return this.http.post(this.url + 'sales', sale);
   }
 
-  getProducts() {
+  getSales() {
     return this.http.get<Sale[]>(this.url + 'sales');
   }
 
-  getProduct(id: string) {
+  getSale(id: string) {
     return this.http.get<Sale>(`${this.url}sales/${id}`);
   }
 
-  deleteProduct(id: string) {
+  deleteSale(id: string) {
     return this.http.delete(`${this.url}sales/${id}`);
   }
 
-  updateProduct(id: string, title: string, description: string) {
+  updateSale(id: string, title: string, description: string) {
     return this.http.put(`${this.url}/sales${id}`, {title, description});
   }
 

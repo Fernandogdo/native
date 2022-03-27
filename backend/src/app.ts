@@ -8,6 +8,7 @@ const app = express();
 import indexRoutes  from './routes/index';
 import productRoutes  from './routes/product.routes';
 import saleRoutes from './routes/sale.routes';
+import userRoutes from "./routes/user.routes";
 
 //settings
 app.set('port', process.env.PORT || 3000)
@@ -21,6 +22,9 @@ app.use(express.json());
 app.use('/api', indexRoutes)
 app.use('/api', productRoutes)
 app.use('/api', saleRoutes)
+app.use('/api', saleRoutes)
+app.use('/api', userRoutes)
+
 
 
 

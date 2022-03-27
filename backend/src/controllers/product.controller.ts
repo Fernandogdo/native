@@ -55,14 +55,17 @@ export async function deleteProduct(req: Request, res: Response): Promise<Respon
 
 export async function updatedProduct(req: Request, res: Response): Promise<Response> {
     const { id } = req.params;
-    const {title, description, price, stock } = req.body;
-    console.log("editado", req.body)
+    const {title, category, description, price, stock } = req.body;
+    // console.log("editado", req.body)
     const updatedProduct = await Product.findByIdAndUpdate(id, {
         title,
+        category,
         description,
         price,
         stock
     }, {new: true});
+
+    console.log("updatedProduct", updatedProduct)
 
     return res.json({
         message: "Update susccesfully",

@@ -13,6 +13,7 @@ export class ModalRegistroProductosComponent implements OnInit {
   photoSelected: string | ArrayBuffer;
   file: File;
   idCategory;
+  titleCategory;
 
   constructor(
     private productsService:ProductsService,
@@ -22,6 +23,8 @@ export class ModalRegistroProductosComponent implements OnInit {
   ngOnInit(): void {
     console.log("DATACATEGORIAPARAPRODUCT", this.data)
     this.idCategory = this.data.idCategoria
+    this.titleCategory = this.data.title
+
 
   }
 

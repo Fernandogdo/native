@@ -6,5 +6,5 @@ export interface Sale{
     month: string,
     total: number,
     products: string
-    // imagePath: string;
+    imagePath: string;
 }

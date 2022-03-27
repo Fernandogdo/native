@@ -6,6 +6,7 @@ import { DetailSaleComponent } from './components/detail-sale/detail-sale.compon
 import { ProductsComponent } from './components/products/products.component';
 import { RegisterSaleComponent } from './components/register-sale/register-sale.component';
 import { SaleComponent } from './components/sale/sale.component';
+import { ViewProductsCategoryComponent } from './components/view-products-category/view-products-category.component';
 
 
 const routes: Routes = [
@@ -15,7 +16,9 @@ const routes: Routes = [
   {path: 'products', component: ProductsComponent},
   {path: 'sale', component: SaleComponent},
   {path: 'register-sale', component: RegisterSaleComponent},
-  {path: 'detail-sale/:id', component: DetailSaleComponent}
+  {path: 'detail-sale/:id', component: DetailSaleComponent},
+  {path: 'view-products-category/:category', component: ViewProductsCategoryComponent}
+
 
 ];
 

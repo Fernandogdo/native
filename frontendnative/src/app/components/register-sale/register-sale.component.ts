@@ -6,7 +6,7 @@ import { Sale } from 'src/app/interfaces/Sale';
 import { ProductsService } from 'src/app/services/products/products.service';
 import { SalesService } from 'src/app/services/sales/sales.service';
 import { FormBuilder, FormGroup, FormArray, FormControl, Validators } from '@angular/forms';
-
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-register-sale',
@@ -36,6 +36,7 @@ export class RegisterSaleComponent implements OnInit {
   descriptionProduct: string;
   imageProduct: string;
   productsOriginal;
+  disabled: boolean = false
 
   orderForm: FormGroup;
   items: FormArray;
@@ -43,13 +44,14 @@ export class RegisterSaleComponent implements OnInit {
   constructor(
     private salesService: SalesService,
     private productsService: ProductsService,
-    private formBuilder: FormBuilder
+    // private formBuilder: FormBuilder,
+    private _snackBar: MatSnackBar,
   ) { }
 
   ngOnInit(): void {
-    this.orderForm = new FormGroup({
-      items: new FormArray([])
-    });
+    // this.orderForm = new FormGroup({
+    //   items: new FormArray([])
+    // });
     // this.getSales();
     this.getProducts();
   }
@@ -57,6 +59,7 @@ export class RegisterSaleComponent implements OnInit {
   getProducts() {
     this.productsService.getProducts().subscribe(res => {
       this.arrayProducts = res;
+      console.log("arrayProducts", this.arrayProducts)
       this.productsOriginal = JSON.parse(
         JSON.stringify(this.arrayProducts)
       );
@@ -92,7 +95,24 @@ export class RegisterSaleComponent implements OnInit {
       quantity: cantidad
     }
     this.Products.push(product)
+    this.disabled = true;
     console.log("arrayProducts", this.Products)
+
+
+    this.Products.forEach((productSale) => {
+      let productOriginal = this.arrayProducts.find(productOriginal => productOriginal.title == productSale.title)
+      console.log("product", productOriginal.title, productSale.title)
+
+      if (productSale.quantity > productOriginal.stock) {
+        console.log("NO ESTA EN EL RNGO")
+        this._snackBar.open("La cantidad " + productSale.quantity + " sobrepasa el stock disponible " + productOriginal.stock, "Cerrar", {
+          duration: 2000,
+        });
+        this.Products = this.Products.filter((item) => item.title !== productSale.title)
+
+      }
+    })
+
     this.dataSource = new MatTableDataSource(this.Products);
     this.dataSource.paginator = this.paginator;
     // this.editProduct(cantidad)
@@ -104,40 +124,35 @@ export class RegisterSaleComponent implements OnInit {
     console.log("PRODUCTS", this.productsOriginal)
 
     this.Products.forEach((productSale) => {
-      console.log("Productsale", productSale)
-      let confPersonalizadaOriginal = this.productsOriginal.find(productOriginal => productOriginal.title == productSale.title)
-      console.log("🚀 ~ file: register-sale.component.ts ~ line 109 ~ RegisterSaleComponent ~ this.Products.forEach ~ confPersonalizadaOriginal", confPersonalizadaOriginal)
+      // console.log("Productsale", productSale)
+      let productOriginal = this.arrayProducts.find(productOriginal => productOriginal.title == productSale.title)
+      // console.log("🚀 ~ file: register-sale.component.ts ~ line 109 ~ RegisterSaleComponent ~ this.Products.forEach ~ productOriginal", productOriginal)
 
-      if (confPersonalizadaOriginal.title == productSale.title && confPersonalizadaOriginal.stock == productSale.stock) return
+      if (productOriginal.title == productSale.title && productOriginal.stock == productSale.stock) return
 
-      console.log("confPersonalizadaOriginal", confPersonalizadaOriginal)
+      console.log("saleProduct", productOriginal.title, productOriginal._id)
 
-      this.stock = confPersonalizadaOriginal.stock - productSale.quantity
+      this.stock = productOriginal.stock - productSale.quantity
 
-      // if (confPersonalizadaOriginal.title == productSale.title) {
-      console.log("confPersonalizadaOriginal.title == productSale.title", confPersonalizadaOriginal.title, productSale.title)
+      // if (productOriginal.title == productSale.title) {
+      // console.log("productOriginal.title == productSale.title", productOriginal.title, productSale.title)
       const editProduct = {
-        title: confPersonalizadaOriginal.title,
-        category: confPersonalizadaOriginal.category,
-        description: confPersonalizadaOriginal.description,
-        price: confPersonalizadaOriginal.price,
+        title: productOriginal.title,
+        category: productOriginal.category,
+        description: productOriginal.description,
+        price: productOriginal.price,
         stock: this.stock,
         // imagePath: this.imageProduct
       }
-      console.log('editProduct', this.opcionSeleccionada, editProduct)
-      // }
+      console.log('editProduct', productOriginal._id, editProduct)
+
+
+      this.productsService.updateProduct(productOriginal._id, editProduct).subscribe((res) => {
+        console.log("reseditado", res)
+        this.getProducts()
+      })
 
     });
-
-
-
-
-
-    // this.productsService.updateProduct(this.opcionSeleccionada, editProduct).subscribe((res)=>{
-    //   console.log(res)
-    // }, (error)=>{
-    //   console.log("ERROR")
-    // })
   }
 
 
@@ -157,6 +172,11 @@ export class RegisterSaleComponent implements OnInit {
     let now = new Date();
     let month = now.toLocaleString("es-ES", { month: "long" })
     console.log("date", now.toLocaleString("es-ES", { month: "long" }))
+    month.charAt(0).toUpperCase() + month.slice(1);
+
+    month = month.charAt(0).toUpperCase() + month.slice(1)
+    console.log("MESTRANS", month)
+
     const sale = {
       title: this.title,
       description: this.description,
@@ -166,11 +186,11 @@ export class RegisterSaleComponent implements OnInit {
       products: this.Products
     }
 
-    console.log("🚀 ~ file: register-sale.component.ts ~ line 148 ~ RegisterSaleComponent ~ postSale ~ sale", sale)
+    // console.log("🚀 ~ file: register-sale.component.ts ~ line 148 ~ RegisterSaleComponent ~ postSale ~ sale", sale)
 
-    // this.salesService.createSale(sale).subscribe((res) => {
-    //   console.log(res);
-    // })
+    this.salesService.createSale(sale).subscribe((res) => {
+      console.log(res);
+    })
     this.editProduct()
     // this.salesService.createSale()
   }
