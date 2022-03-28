@@ -1,15 +1,17 @@
 import { Request, Response } from 'express'
 import User from '../models/User'
 import bcrypt from "bcrypt";
+import { generateJWT } from "../helpers/jwt.helpers";
+import { validationResult } from "express-validator";
 
 
-// import {  validationResult } from "express-validator";
-// import path  from 'path'; 
-// import fs from 'fs-extra';
-
-export async function getUsers(req: Request, res: Response): Promise<Response> {
+export async function getUsers(req: any, res: Response): Promise<Response> {
     const users = await User.find();
-    return res.json(users)
+    return res.json({
+        ok: true,
+        users,
+        uid: req.uid
+    })
 }
 
 export async function getUser(req: Request, res: Response): Promise<Response> {
@@ -19,13 +21,11 @@ export async function getUser(req: Request, res: Response): Promise<Response> {
     return res.json(user)
 }
 
+
 export async function createuser(req: Request, res: Response): Promise<Response> {
-    const { name, email, password, role } = req.body
-
-    let userSave: any;
-
-
-
+    const { email, password } = req.body
+    let user;
+    let token
 
     try {
 
@@ -38,32 +38,21 @@ export async function createuser(req: Request, res: Response): Promise<Response>
             })
         }
 
-        console.log(req.body.products)
-        const newUser = {
-            name: name,
-            email: email,
-            password: password,
-            // role: role,
-            // total: total,
-            // products: products
-        };
-
-        console.log("userS", newUser)
-
-        userSave = new User(newUser);
-        console.log("user", userSave)
+        user = new User(req.body)
+        // await user.save();
 
         //Encrypt password
-
         const salt = bcrypt.genSaltSync();
+        user.password = bcrypt.hashSync(password, salt)
 
-        userSave.password = bcrypt.hashSync(password, salt)
-
-
-        await userSave.save()
+        
 
 
+        console.log("password", user.password)
 
+        await user.save()
+
+        token = await generateJWT(user.id);
 
 
     } catch (error) {
@@ -75,55 +64,36 @@ export async function createuser(req: Request, res: Response): Promise<Response>
     }
 
     return res.json({
-        message: 'User created successfully',
-        userSave
-    })
-
-
-
-
-}
-
-
-export async function deleteuser(req: Request, res: Response): Promise<Response> {
-    const { id } = req.params;
-    const user = await User.findByIdAndRemove(id);
-
-    return res.json({
-        message: "user deleted",
-        user
+        ok: true,
+        user,
+        token
     })
 }
+
 
 
 export async function updateduser(req: Request, res: Response): Promise<Response> {
     //Validar token and correct user
-
-
     const { id } = req.params;
-    const { title, description, month } = req.body;
+    // const { name, role, email } = req.body;
 
     let updateduser;
-    console.log(req.params)
-
-
 
     try {
 
-        const userdb = await User.findById(id);
+        const userDB = await User.findById(id);
 
-        console.log("userdb", userdb)
-
-        if (!userdb) {
+        if (!userDB) {
             return res.status(404).json({
                 ok: false,
-                msg: 'No exist user'
+                msg: 'No exist user for id'
             });
         }
 
         const { password, email, ...fields } = req.body;
 
-        if (userdb.email !== email) {
+
+        if (userDB.email !== email) {
 
             const existEmail = await User.findOne({ email });
             if (existEmail) {
@@ -134,10 +104,9 @@ export async function updateduser(req: Request, res: Response): Promise<Response
             }
         }
 
-        fields.email = email;
+        fields.email = email
 
-        //Update
-        updateduser = await User.findByIdAndUpdate(id, fields, { new: true })
+        updateduser = await User.findByIdAndUpdate(id, fields, { new: true });
 
 
     } catch (error) {
@@ -149,8 +118,78 @@ export async function updateduser(req: Request, res: Response): Promise<Response
     }
 
     return res.json({
-        message: "Update susccesfully",
+        ok: true,
         updateduser
     })
 
 }
+
+
+export async function deleteUser(req: Request, res: Response): Promise<Response> {
+    const { id } = req.params;
+    let user;
+
+
+    try {
+
+        const userdb = await User.findById(id);
+
+        if (!userdb) {
+            return res.status(404).json({
+                ok: false,
+                msg: 'User no exist for this id'
+            })
+        }
+
+
+        await User.findByIdAndRemove(id);
+
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({
+            of: false,
+            msg: 'Error to delete'
+        })
+    }
+
+    return res.json({
+        ok: true,
+        message: "user deleted"
+    })
+}
+
+
+// export async function deleteUser(req: Request, res: Response): Promise<Response> {
+//     const { id } = req.params;
+//     let user;
+
+
+//     try {
+
+//         const userdb = await User.findById(id);
+
+//         if (!userdb) {
+//             return res.status(400).json({
+//                 ok: false,
+//                 msg: 'User no exist for this id'
+//             })
+//         }
+
+
+//         user = await User.findByIdAndRemove(id);
+
+//     } catch (error) {
+//         console.log(error)
+//         res.status(500).json({
+//             of: false,
+//             msg: 'Error to delete'
+//         })
+//     }
+
+//     return res.json({
+//         message: "user deleted",
+//         user
+//     })
+// }
+
+
