@@ -42,8 +42,4 @@ export class ProductsService {
     return this.http.put(`${this.URI}/${id}`, objetoEdit);
   }
 
-
-  // getProdcuts(){
-  //   return this.http.get(this.URI)
-  // }
 }

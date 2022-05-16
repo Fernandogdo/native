@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CategoriesService } from 'src/app/services/categories/categories.service';
-import {Router} from '@angular/router'
+import { Router } from '@angular/router'
+import { MatDialogRef } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 interface HtmlInputEvent extends Event {
   target: HTMLInputElement & EventTarget;
@@ -17,13 +19,15 @@ export class ModalCategoryComponent implements OnInit {
   file: File;
 
   constructor(
-    private categoriesService: CategoriesService, private router: Router
-    ) { }
+    private categoriesService: CategoriesService, private router: Router,
+    public dialogRef: MatDialogRef<ModalCategoryComponent>,
+    private _snackBar: MatSnackBar
+  ) { }
 
   ngOnInit(): void {
   }
 
-  
+
 
   onPhotoSelected(event): void {
     const evento = event.target as HTMLInputElement
@@ -38,11 +42,24 @@ export class ModalCategoryComponent implements OnInit {
 
   uploadPhoto(title: HTMLInputElement, description: HTMLTextAreaElement) {
     console.log("datos", title.value, description.value)
-    this.categoriesService.createCategory(title.value, description.value, this.file).subscribe(
-      res => console.log(res), 
-      err => console.log(err)
-    )
+    this.categoriesService.createCategory(title.value, description.value, this.file).subscribe({
+      next: (res) => {
+        console.log(res)
+        this._snackBar.open("Categoria " + title.value + " creada correctamente", "Cerrar", {
+          duration: 3000,
+        });
+      },
+      error: (e) => {
+        console.log(e);
+      }
+    })
     return false;
   }
-  
+
+
+  onNoClick(): void {
+    // console.log("empezado a cerrar")
+    this.dialogRef.close();
+  }
+
 }

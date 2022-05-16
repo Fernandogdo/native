@@ -21,8 +21,7 @@
                                     <form (submit)="updateCategory(title, description)">
                                         <mat-form-field class="input-formulario" appearance="outline">
                                             <mat-label id="input-label">Categoria</mat-label>
-                                            <input id="input" matInput 
-                                                placeholder="Ej. Categoria"
+                                            <input id="input" matInput placeholder="Ej. Categoria"
                                                 [value]="category.title" #title>
                                             <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
                                             <!-- <mat-hint>Hint</mat-hint> -->
@@ -43,9 +42,29 @@
                                                 class="img-fluid">
                                         </div>
 
+
                                         <div class="col text-center">
-                                            <button mat-raised-button class="botones" color="primary">Actualizar</button>
+
+                                            <button mat-raised-button class="btn-save" color="primary"
+                                                (click)="onNoClick()" cdkFocusInitial>
+                                                <mat-icon>
+                                                    save
+                                                </mat-icon>
+                                                Actualizar
+                                            </button>
+                                            <button mat-raised-button mat-dialog-close color="warn">
+                                                <mat-icon>
+                                                    close
+                                                </mat-icon>
+                                                Cerrar
+                                            </button>
                                         </div>
+
+                                        <!-- <div class="col text-center">
+                                            <button mat-raised-button class="botones"
+                                                color="primary">Actualizar</button>
+                                           
+                                        </div> -->
                                     </form>
                                 </mat-card-content>
 

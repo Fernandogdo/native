@@ -11,17 +11,17 @@ export class SalesService {
 
   // URI = 'http://localhost:3000/api/Sales';
 
-  public url:string
+  public url: string;
 
   constructor(
     private http: HttpClient
-  ) { 
+  ) {
     this.url = Global.url;
   }
 
 
   createSale(sale) {
-  
+
     return this.http.post(this.url + 'sales', sale);
   }
 
@@ -38,7 +38,7 @@ export class SalesService {
   }
 
   updateSale(id: string, title: string, description: string) {
-    return this.http.put(`${this.url}/sales${id}`, {title, description});
+    return this.http.put(`${this.url}/sales${id}`, { title, description });
   }
 
 }

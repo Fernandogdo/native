@@ -1,5 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Categorie } from 'src/app/interfaces/Category';
 import { CategoriesService } from 'src/app/services/categories/categories.service';
 
@@ -11,8 +12,11 @@ import { CategoriesService } from 'src/app/services/categories/categories.servic
 export class ModalEditCategoryComponent implements OnInit {
 
   constructor(
-    private categoriesService:CategoriesService,
-    @Inject(MAT_DIALOG_DATA) public data: any
+    private categoriesService: CategoriesService,
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    public dialogRef: MatDialogRef<ModalEditCategoryComponent>,
+    private _snackBar: MatSnackBar
+
   ) { }
 
   idCategoria: string;
@@ -24,23 +28,41 @@ export class ModalEditCategoryComponent implements OnInit {
     this.getProduct()
   }
 
-  getProduct(){
-    this.categoriesService.getCategory(this.idCategoria).subscribe((res)=>{
+  getProduct() {
+    this.categoriesService.getCategory(this.idCategoria).subscribe((res) => {
       this.category = res;
       console.log("DATOSCATEGORIAEDITAR", res)
     })
   }
 
-  updateCategory(title:HTMLInputElement, description: HTMLTextAreaElement): boolean{
+  updateCategory(title: HTMLInputElement, description: HTMLTextAreaElement) {
     // console.log("editado", title, description)
-    this.categoriesService.updateCategory(this.idCategoria, title.value, description.value).subscribe((res)=>{
-      console.log("editadoCategory", res)
+    this.categoriesService.updateCategory(this.idCategoria, title.value, description.value).subscribe({
+      next: (res) => {
+        console.log("editadoCategory", res)
+        this._snackBar.open("Categoria editada correctamente", "Cerrar", {
+          duration: 3000,
+        });
+
+      },
+      error: (e) => {
+        console.log(e);
+
+      }
     })
-    return false;
+
+    this.onNoClick();
+
+    // return false;
+  }
+
+
+  onNoClick(): void {
+    console.log("empezado a cerrar")
+    this.dialogRef.close();
   }
 
 
 
-  
 
 }

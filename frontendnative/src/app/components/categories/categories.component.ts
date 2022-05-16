@@ -4,6 +4,7 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ModalCategoryComponent } from '../modal-category/modal-category.component';
 import { ModalEditCategoryComponent } from '../modal-edit-category/modal-edit-category.component';
 import { ModalRegistroProductosComponent } from '../modal-registro-productos/modal-registro-productos.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 
 @Component({
@@ -12,18 +13,19 @@ import { ModalRegistroProductosComponent } from '../modal-registro-productos/mod
   styleUrls: ['./categories.component.scss']
 })
 export class CategoriesComponent implements OnInit {
-  
+
 
   dialogCreateCategoria: MatDialogRef<ModalCategoryComponent>;
   dialogEditCategoria: MatDialogRef<ModalEditCategoryComponent>;
   dialogCreateProduct: MatDialogRef<ModalRegistroProductosComponent>;
 
 
-  categorias:any = []
+  categorias: any = []
 
   constructor(
-    private categoriesService:CategoriesService,
-    private dialog: MatDialog
+    private categoriesService: CategoriesService,
+    private dialog: MatDialog,
+    private _snackBar: MatSnackBar
   ) { }
 
   ngOnInit(): void {
@@ -31,14 +33,14 @@ export class CategoriesComponent implements OnInit {
   }
 
 
-  getCategories(){
-    this.categoriesService.getCategories().subscribe((categories)=>{
+  getCategories() {
+    this.categoriesService.getCategories().subscribe((categories) => {
       this.categorias = categories;
       console.log("categories", categories)
     });
   }
 
-  ModalCreateCategoria(){
+  ModalCreateCategoria() {
     this.dialogCreateCategoria = this.dialog.open(ModalCategoryComponent, {
       // data: {
       //   idCategoria: id,
@@ -47,13 +49,13 @@ export class CategoriesComponent implements OnInit {
       //   img: img
       // }
     });
-    this.dialogCreateCategoria.afterClosed().subscribe(()=> {
+    this.dialogCreateCategoria.afterClosed().subscribe(() => {
       this.getCategories();
     });
   }
 
 
-  ModalEditCategory(id, title, description){
+  ModalEditCategory(id, title, description) {
     this.dialogEditCategoria = this.dialog.open(ModalEditCategoryComponent, {
       data: {
         idCategoria: id,
@@ -62,13 +64,13 @@ export class CategoriesComponent implements OnInit {
         // img: img
       }
     });
-    this.dialogEditCategoria.afterClosed().subscribe(()=> {
+    this.dialogEditCategoria.afterClosed().subscribe(() => {
       this.getCategories();
     });
 
   }
 
-  ModalCreateProduct(idCategory, title){
+  ModalCreateProduct(idCategory, title) {
     this.dialogCreateProduct = this.dialog.open(ModalRegistroProductosComponent, {
       data: {
         idCategoria: idCategory,
@@ -77,19 +79,27 @@ export class CategoriesComponent implements OnInit {
         // img: img
       }
     });
-    this.dialogCreateProduct.afterClosed().subscribe(()=> {
+    this.dialogCreateProduct.afterClosed().subscribe(() => {
       this.getCategories();
     });
 
   }
 
 
-  deleteCategory(id: string){
+  deleteCategory(id: string, titleCategory: string) {
     console.log("IDAELIMINARCATEGORY", id)
-    this.categoriesService.deleteCategory(id).subscribe((res)=>{
-      console.log("Categoria eliminada", res)
-      this.getCategories()
+    this.categoriesService.deleteCategory(id).subscribe({
+      next: (res) => {
+        console.log("Categoria eliminada", res)
+        this._snackBar.open("Categoria " + titleCategory + " eliminada correctamente", "Cerrar", {
+          duration: 3000,
+        });
+        this.getCategories()
+      }
     })
+
+
+
   }
 
 

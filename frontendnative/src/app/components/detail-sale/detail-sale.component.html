@@ -2,6 +2,19 @@
     <div class="container-fluid">
         <h2 class="title-component">Detalle de Venta</h2>
         <div class="row">
+
+            <div class="col-md-12">
+                <div class="container" id="formulario">
+                    <div class="col text-center">
+                        <button mat-raised-button class="btnBackSale" color="primary" routerLink="/sale">
+                            <mat-icon>
+                                arrow_back
+                            </mat-icon>
+                            Regresar a Ventas
+                        </button>
+                    </div>
+                </div>
+            </div>
             <div class="col-md-12">
                 <mat-card>
                     <form>
@@ -17,8 +30,7 @@
                                 <td>
                                     <h6>Descripción</h6>
                                     <mat-form-field class="example-full-width" appearance="fill">
-                                        <!-- <mat-label></mat-label> -->
-                                        <input matInput [value]=descriptionSale disabled>
+                                        <input matInput type="textarea" [value]=descriptionSale disabled>
                                     </mat-form-field>
                                 </td>
                                 <td>

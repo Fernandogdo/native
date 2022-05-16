@@ -1,9 +1,9 @@
 export interface User {
     role: string,
-    nombre: string,
+    name: string,
     email: string,
     password?: string, 
-    google?: boolean,
-    img?: string, 
+    // google?: boolean,
+    // img?: string, 
     uid?: string,
 }

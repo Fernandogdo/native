@@ -3,6 +3,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { CategoriesService } from 'src/app/services/categories/categories.service';
 import { ProductsService } from 'src/app/services/products/products.service';
 import { Product } from "../../interfaces/Product";
+import { MatSnackBar } from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-modal-edit-product',
@@ -27,7 +28,8 @@ export class ModalEditProductComponent implements OnInit {
     public dialogRef: MatDialogRef<ModalEditProductComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private categoriesService: CategoriesService,
-    private productsService: ProductsService
+    private productsService: ProductsService,
+    private _snackBar: MatSnackBar
   ) { }
 
   ngOnInit(): void {
@@ -35,7 +37,7 @@ export class ModalEditProductComponent implements OnInit {
     console.log("sadsad", this.data.idProduct, this.data.category, this.data.title, this.data.description, this.data.price, this.data.stock)
     this.idProduct = this.data.idProduct;
     this.titleProduct = this.data.title;
-    this.categoryProduct = this.data.category,
+    this.categoryProduct = this.data.category._id,
       this.descriptionProduct = this.data.description
     this.priceProduct = this.data.price;
     this.stockProduct = this.data.stock
@@ -45,8 +47,8 @@ export class ModalEditProductComponent implements OnInit {
   }
 
 
-  getProduct(){
-    this.productsService.getProduct(this.idProduct).subscribe((res)=>{
+  getProduct() {
+    this.productsService.getProduct(this.idProduct).subscribe((res) => {
       console.log("product", res)
       this.product = res
     })
@@ -59,25 +61,9 @@ export class ModalEditProductComponent implements OnInit {
     })
   }
 
-  myChange($event) {
-    console.log($event);
-
-    this.categoryProduct = $event;
-    // this.productsService.getProduct(this.opcionSeleccionada).subscribe((res) => {
-    //   this.product = res
-    //   this.productName = this.product.title
-    //   this.stock = this.product.stock
-    //   this.price = this.product.price
-    //   this.categoryProduct = this.product.category;
-    //   this.descriptionProduct = this.product.description;
-    //   console.log("🚀 ~ file: register-sale.component.ts ~ line 60 ~ RegisterSaleComponent ~ this.productsService.getProduct ~ res", this.productName, this.product.stock, this.cantidad)
-    // });
-  }
 
 
-  updateProduct(idProduct: HTMLInputElement, title: HTMLInputElement, price: HTMLInputElement, stock: HTMLInputElement, description: HTMLTextAreaElement) {
-
-    console.log("productUpdate", idProduct.value, title.value, this.categoryProduct, price.value, stock.value, description.value)
+  updateProduct(title: HTMLInputElement, price: HTMLInputElement, stock: HTMLInputElement, description: HTMLTextAreaElement) {
 
     const producUpdated = {
       title: title.value,
@@ -86,17 +72,33 @@ export class ModalEditProductComponent implements OnInit {
       price: price.value,
       stock: stock.value,
     }
+    console.log("🚀 ~ file: modal-edit-product.component.ts ~ line 103 ~ ModalEditProductComponent ~ updateProduct ~ producUpdated", producUpdated)
 
-    this.productsService.updateProduct(this.idProduct, producUpdated).subscribe((res)=>{
-      console.log("res", res)
+
+    this.productsService.updateProduct(this.idProduct, producUpdated).subscribe({
+      next: (res) => {
+        console.log("res", res)
+        this._snackBar.open("Producto actualizado", "Cerrar", {
+          duration: 3000,
+        });
+      },
+
+      error: (e) => {
+        console.log(e)
+      }
+
     })
 
-    // this.onNoClick()
+
+
+
+
+    this.onNoClick()
 
   }
 
   onNoClick(): void {
-    console.log("empezado a cerrar")
+    // console.log("empezado a cerrar")
     this.dialogRef.close();
   }
 

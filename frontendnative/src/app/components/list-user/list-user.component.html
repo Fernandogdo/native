@@ -1,0 +1,143 @@
+<div class="main-content">
+    <div class="container-fluid">
+        <h2 class="title-component">Lista de Usuarios</h2>
+    </div>
+</div>
+
+<div class="main-content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-3">
+                <mat-card class="card-login">
+                    <mat-card-header>
+                        <div class="col text-center">
+                            <mat-card-title>
+                                <b>
+                                    Registro de Usuarios
+                                </b>
+                            </mat-card-title>
+
+                            <mat-card-subtitle>
+                                <img class="img-native" src="../../../assets/img/native-white.jpeg" alt="">
+                            </mat-card-subtitle>
+                        </div>
+
+                    </mat-card-header>
+
+                    <form novalidate [formGroup]="registerForm" (ngSubmit)="createUser()">
+
+                        <mat-form-field appearance="outline">
+                            <mat-label>Usuario</mat-label>
+                            <input matInput placeholder="username" formControlName="name">
+                            <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
+                        </mat-form-field>
+
+
+                        <mat-form-field appearance="outline">
+                            <mat-label>Email</mat-label>
+                            <input matInput type="email" placeholder="usuario@gmail.com" formControlName="email">
+                            <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
+                        </mat-form-field>
+
+                        <mat-form-field appearance="outline">
+                            <mat-label>Contraseña</mat-label>
+                            <input matInput type="password" [type]="hide ? 'password' : 'text'"
+                                formControlName="password">
+
+                        </mat-form-field>
+
+                        <mat-form-field appearance="outline">
+                            <mat-label>Confirmar Contraseña</mat-label>
+                            <input matInput type="password" [type]="hide ? 'password' : 'text'"
+                                formControlName="password2">
+                        </mat-form-field>
+
+                        <div class="row">
+                            <div class="col text-danger">
+                                <p *ngIf="fielNoValid('name')">El nombre es obligatorio</p>
+                                <p *ngIf="fielNoValid('email')">El email es obligatorio</p>
+                                <p *ngIf="passwordNoValid()">* Las contraseñas deben ser iguales</p>
+
+                            </div>
+                        </div>
+
+                        <button type="submit" mat-raised-button color="primary">
+                            Registrar
+                        </button>
+
+                    </form>
+                    <br>
+                </mat-card>
+            </div>
+            <div class="col-md-9">
+                <div class="mat-elevation-z8">
+                    <mat-card class="buscador">
+                        <b>Buscador:</b>
+                        <mat-form-field appearance="standard">
+                            <mat-label>Busqueda de Usuarios</mat-label>
+                            <input matInput (keyup)="applyFilter($event)" placeholder="Ej. Miel" #input>
+                        </mat-form-field>
+                    </mat-card>
+
+                    <table mat-table [dataSource]="dataSource">
+
+                        <!-- Title Column -->
+                        <ng-container matColumnDef="name">
+                            <th mat-header-cell *matHeaderCellDef> Title </th>
+                            <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+                        </ng-container>
+
+                        <!-- Category Column -->
+                        <ng-container matColumnDef="email">
+                            <th mat-header-cell *matHeaderCellDef> Categoria </th>
+                            <td mat-cell *matCellDef="let element"> {{element.email}} </td>
+                        </ng-container>
+
+                        <!-- Price Column -->
+                        <ng-container matColumnDef="role">
+                            <th mat-header-cell *matHeaderCellDef> Precio </th>
+                            <td mat-cell *matCellDef="let element">
+
+                                <mat-form-field class="select" appearance="fill">
+                                    <mat-label>Choose one</mat-label>
+                                    <mat-select [(ngModel)]="element.role" (selectionChange)="roleChange(element)">
+                                        <mat-option value="ADMIN_ROLE">ADMIN_ROLE</mat-option>
+                                        <mat-option value="USER_ROLE">USER_ROLE</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </td>
+                        </ng-container>
+
+
+                        <!-- OPtions Column -->
+                        <!-- OPtions Column -->
+                        <ng-container matColumnDef="options">
+                            <th mat-header-cell *matHeaderCellDef> Opciones </th>
+                            <td mat-cell *matCellDef="let element">
+                                <button mat-icon-button [matMenuTriggerFor]="menu"
+                                    aria-label="Example icon-button with a menu">
+                                    <mat-icon>settings</mat-icon>
+                                </button>
+                                <mat-menu #menu="matMenu">
+                                    <!-- <button mat-menu-item>
+                                        <mat-icon>edit</mat-icon>
+                                        <span>Editar</span>
+                                    </button> -->
+                                    <button mat-menu-item (click)="deleteUser(element.uid)">
+                                        <mat-icon>delete</mat-icon>
+                                        <span>Eliminar</span>
+                                    </button>
+                                </mat-menu>
+                            </td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                    </table>
+
+                    <mat-paginator id="paginator" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

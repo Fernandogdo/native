@@ -10,6 +10,7 @@ import productRoutes  from './routes/product.routes';
 import saleRoutes from './routes/sale.routes';
 import userRoutes from "./routes/user.routes";
 import loginRoutes  from "./routes/login.routes";
+import findAllRoutes from "./routes/findAll.routes";
 
 //settings
 app.set('port', process.env.PORT || 3000)
@@ -26,6 +27,8 @@ app.use('/api', saleRoutes)
 app.use('/api', saleRoutes)
 app.use('/api', userRoutes)
 app.use('/api', loginRoutes)
+app.use('/api', findAllRoutes)
+
 
 
 

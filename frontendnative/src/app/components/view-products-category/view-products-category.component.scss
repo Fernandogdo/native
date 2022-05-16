@@ -6,12 +6,12 @@
 .example-card {
     margin-top: 20px;
     max-width: 400px;
-    cursor: pointer;
+    // cursor: pointer;
 }
 
-.example-card:hover {
-    border: 1px solid #333;
-}
+// .example-card:hover {
+//     border: 1px solid #333;
+// }
 
 .example-header-image {
     background-image: url("../../../assets/img/native-white.jpeg");

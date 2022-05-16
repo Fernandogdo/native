@@ -1,7 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ProductsService } from 'src/app/services/products/products.service';
-
 
 @Component({
   selector: 'app-modal-registro-productos',
@@ -16,8 +16,13 @@ export class ModalRegistroProductosComponent implements OnInit {
   titleCategory;
 
   constructor(
-    private productsService:ProductsService,
-    @Inject(MAT_DIALOG_DATA) public data: any
+    private productsService: ProductsService,
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    public dialogRef: MatDialogRef<ModalRegistroProductosComponent>,
+    private _snackBar: MatSnackBar
+
+    
+
   ) { }
 
   ngOnInit(): void {
@@ -39,13 +44,29 @@ export class ModalRegistroProductosComponent implements OnInit {
     }
   }
 
-  uploadPhoto(title: HTMLInputElement, category:HTMLInputElement, description: HTMLTextAreaElement, price: HTMLInputElement, stock: HTMLInputElement) {
+  uploadPhoto(title: HTMLInputElement, category: HTMLInputElement, description: HTMLTextAreaElement, price: HTMLInputElement, stock: HTMLInputElement) {
     console.log("datos", title.value, category.value, description.value, stock.value, price.value)
-    this.productsService.createProduct(title.value, category.value, description.value,  stock.value, price.value, this.file).subscribe(
-      res => console.log(res), 
-      err => console.log(err)
-    )
+    this.productsService.createProduct(title.value, category.value, description.value, stock.value, price.value, this.file).subscribe({
+      next: (res) => {
+        console.log(res)
+        this._snackBar.open("Producto " + title.value + " agregado" , "Cerrar", {
+          duration: 3000,
+        });
+      },
+      error: (e) => {
+        console.log(e);
+
+      }
+    })
+
+    this.onNoClick()
+
     return false;
+  }
+
+  onNoClick(): void {
+    console.log("empezado a cerrar")
+    this.dialogRef.close();
   }
 
 }

@@ -2,7 +2,6 @@ import { Request, Response } from 'express'
 import User from '../models/User'
 import bcrypt from "bcrypt";
 import { generateJWT } from "../helpers/jwt.helpers";
-import { validationResult } from "express-validator";
 
 
 export async function getUsers(req: any, res: Response): Promise<Response> {
@@ -158,38 +157,5 @@ export async function deleteUser(req: Request, res: Response): Promise<Response>
     })
 }
 
-
-// export async function deleteUser(req: Request, res: Response): Promise<Response> {
-//     const { id } = req.params;
-//     let user;
-
-
-//     try {
-
-//         const userdb = await User.findById(id);
-
-//         if (!userdb) {
-//             return res.status(400).json({
-//                 ok: false,
-//                 msg: 'User no exist for this id'
-//             })
-//         }
-
-
-//         user = await User.findByIdAndRemove(id);
-
-//     } catch (error) {
-//         console.log(error)
-//         res.status(500).json({
-//             of: false,
-//             msg: 'Error to delete'
-//         })
-//     }
-
-//     return res.json({
-//         message: "user deleted",
-//         user
-//     })
-// }
 
 

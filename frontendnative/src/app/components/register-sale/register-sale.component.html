@@ -12,8 +12,8 @@
                                     <h6>Título</h6>
                                     <mat-form-field appearance="fill">
                                         <input matInput [value]="title" [(ngModel)]="title"
-                                            [ngModelOptions]="{standalone: true}">
-                                        <mat-hint align="end">Here's the dropdown arrow ^</mat-hint>
+                                            [ngModelOptions]="{standalone: true}" required>
+                                        <!-- <mat-hint align="end">Here's the dropdown arrow ^</mat-hint> -->
                                     </mat-form-field>
                                 </td>
                                 <td>
@@ -21,14 +21,13 @@
                                     <mat-form-field class="example-full-width" appearance="fill">
                                         <!-- <mat-label></mat-label> -->
                                         <input matInput [value]="description" [(ngModel)]="description"
-                                            [ngModelOptions]="{standalone: true}">
+                                            [ngModelOptions]="{standalone: true}" required>
                                     </mat-form-field>
                                 </td>
                                 <td>
                                     <div class="col text-center">
-                                        <button mat-raised-button class="btnCreaPersonalizado" color="primary"
-                                            [routerLink]="['/sale']" routerLinkActive="active" *ngIf="disabled"
-                                            (click)="postSale()">
+                                        <button mat-raised-button class="btnRegisterSale" color="primary"
+                                            *ngIf="disabled" (click)="postSale()">
                                             <span class="material-icons">
                                                 save
                                             </span>
@@ -69,13 +68,13 @@
                                     <h6>Cantidad</h6>
                                     <mat-form-field class="example-full-width" appearance="fill">
                                         <mat-label>Ingrese la cantidad vendida</mat-label>
-                                        <input matInput type="number" [(ngModel)]="cantidad"
+                                        <input matInput type="number" [disabled]=disabledQuantity [(ngModel)]="cantidad"
                                             [ngModelOptions]="{standalone: true}">
                                     </mat-form-field>
                                 </td>
                                 <td>
                                     <div class="col text-center">
-                                        <button mat-raised-button class="btnCreaPersonalizado" color="primary"
+                                        <button mat-raised-button class="btnAddProduct" color="primary"
                                             (click)="addProduct(cantidad)">
                                             <span class="material-icons">
                                                 add_circle_outline
@@ -111,7 +110,7 @@
                             <th mat-header-cell *matHeaderCellDef> Opciones </th>
                             <td mat-cell *matCellDef="let element">
                                 <button mat-icon-button
-                                    (click)="deleteElementProducts(element.title, element.price, element.quantity)"
+                                    (click)="deleteElementProducts(element.id)"
                                     aria-label="Example icon-button with a menu">
                                     <mat-icon>delete</mat-icon>
                                 </button>

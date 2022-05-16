@@ -19,12 +19,17 @@ export const navbarData = [
         icon: 'fal fa-badge-dollar',
         label: 'Ventas'
     },
+    {
+        routeLink: 'list-user',
+        icon: 'fal fa-users',
+        label: 'Usuarios'
+    },
     // {
-    //     routeLink: 'sale',
+    //     routeLink: 'register-user',
     //     icon: 'fal fa-badge-dollar',
     //     label: 'Ventas'
     // },
-   
-    
+
+
 ];
 

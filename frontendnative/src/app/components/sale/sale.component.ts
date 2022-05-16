@@ -4,7 +4,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Sale } from "../../interfaces/Sale";
 import * as _ from "lodash";
-import { DatePipe } from '@angular/common';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-sale',
@@ -15,30 +15,36 @@ export class SaleComponent implements OnInit {
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-
   displayedColumns: string[] = ['title', 'description', 'date', 'total', 'opciones'];
   arraySales: Sale[] = [];
-  arraySalesMeses: Sale[] = [];
-  // arraySalesMeses: Sale[] = [];
+  arraySalesYear: Sale[] = [];
 
-  // arraySalesMeses: Sale[] = [];
-  // arraySalesMeses: Sale[] = [];
   dataSource;
-  pipe = new DatePipe('en-US');
   opcionSeleccionada;
   totalVentas: number;
+  yearActual;
+  yearSelect;
+
+  // meses = [
+  //   'Todo', 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre',
+  // ]
 
 
-  meses = [
-    'Todo', 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto',
+  years = [
+    '2022', '2023', '2024', '2025'
   ]
 
   constructor(
     private salesService: SalesService,
+    private _snackBar: MatSnackBar
   ) { }
 
   ngOnInit(): void {
     this.getSales()
+    var currentTime = new Date();
+    this.yearActual = currentTime.getFullYear()
+    this.setIntrvl()
+    this.yearSelect = currentTime.getFullYear()
   }
 
 
@@ -47,141 +53,68 @@ export class SaleComponent implements OnInit {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
+
+  //Get all the sales
   getSales() {
-    this.salesService.getSales().subscribe((res) => {
-      // console.log("🚀 ~ file: sale.component.ts ~ line 28 ~ SaleComponent ~ getSales ~ res", res)
-      this.arraySales = res;
-      console.log("🚀 ~ file: sale.component.ts ~ line 36 ~ SaleComponent ~ this.salesService.getProducts ~ this.arraySales", this.arraySales)
+    this.salesService.getSales().subscribe({
+      next: (res) => {
+        this.arraySales = res;
 
-      this.dataSource = new MatTableDataSource(this.arraySales);
+        this.dataSource = new MatTableDataSource(this.arraySales);
 
-      this.dataSource.paginator = this.paginator;
+        this.dataSource.paginator = this.paginator;
+      },
+
+      error: (err) => {
+        console.log(err)
+      }
     })
   }
 
-  filtro($event) {
-    console.log("MONTH", $event);
 
-    if ($event == 'Todo') {
-      this.getSales()
-    }
-
-    if ($event == 'Enero') {
-      console.log("MES DE ENERO")
-      this.arraySalesMeses = _.filter(this.arraySales, ['month', 'Enero'])
-      console.log("🚀 ~ file: sale.component.ts ~ line 61 ~ SaleComponent ~ filtro ~ arraySales", this.arraySalesMeses)
-      this.dataSource = new MatTableDataSource(this.arraySalesMeses);
-      this.dataSource.paginator = this.paginator;
-    }
-
-    if ($event == 'Febrero') {
-      console.log("MES DE FEBRERO", this.arraySales)
-      this.arraySalesMeses = _.filter(this.arraySales, ['month', 'Febrero'])
-      console.log("🚀 ~ file: sale.component.ts ~ line 69 ~ SaleComponent ~ filtro ~ this.arraySales", this.arraySalesMeses)
-      this.dataSource = new MatTableDataSource(this.arraySalesMeses);
-      this.dataSource.paginator = this.paginator;
-    }
-
-    if ($event == 'Marzo') {
-      console.log("MES DE MARZO")
-      this.arraySalesMeses = _.filter(this.arraySales, ['month', 'Marzo'])
-      console.log("🚀 ~ file: sale.component.ts ~ line 77 ~ SaleComponent ~ filtro ~ this.arraySales", this.arraySalesMeses)
-      this.dataSource = new MatTableDataSource(this.arraySalesMeses);
-      this.dataSource.paginator = this.paginator;
-    }
-
-    if ($event == 'Abril') {
-      console.log("MES DE MARZO")
-      this.arraySalesMeses = _.filter(this.arraySales, ['month', 'Abril'])
-      console.log("🚀 ~ file: sale.component.ts ~ line 77 ~ SaleComponent ~ filtro ~ this.arraySales", this.arraySalesMeses)
-      this.dataSource = new MatTableDataSource(this.arraySalesMeses);
-      this.dataSource.paginator = this.paginator;
-    }
-
-    if ($event == 'Mayo') {
-      console.log("MES DE MARZO")
-      this.arraySalesMeses = _.filter(this.arraySales, ['month', 'Mayo'])
-      console.log("🚀 ~ file: sale.component.ts ~ line 77 ~ SaleComponent ~ filtro ~ this.arraySales", this.arraySalesMeses)
-      this.dataSource = new MatTableDataSource(this.arraySalesMeses);
-      this.dataSource.paginator = this.paginator;
-    }
-
-    if ($event == 'Junio') {
-      console.log("MES DE MARZO")
-      this.arraySalesMeses = _.filter(this.arraySales, ['month', 'Junio'])
-      console.log("🚀 ~ file: sale.component.ts ~ line 77 ~ SaleComponent ~ filtro ~ this.arraySales", this.arraySalesMeses)
-      this.dataSource = new MatTableDataSource(this.arraySalesMeses);
-      this.dataSource.paginator = this.paginator;
-    }
-
-    if ($event == 'Julio') {
-      console.log("MES DE MARZO")
-      this.arraySalesMeses = _.filter(this.arraySales, ['month', 'Julio'])
-      console.log("🚀 ~ file: sale.component.ts ~ line 77 ~ SaleComponent ~ filtro ~ this.arraySales", this.arraySalesMeses)
-      this.dataSource = new MatTableDataSource(this.arraySalesMeses);
-      this.dataSource.paginator = this.paginator;
-    }
-
-    if ($event == 'Agosto') {
-      console.log("MES DE MARZO")
-      this.arraySalesMeses = _.filter(this.arraySales, ['month', 'Agosto'])
-      console.log("🚀 ~ file: sale.component.ts ~ line 77 ~ SaleComponent ~ filtro ~ this.arraySales", this.arraySalesMeses)
-      this.dataSource = new MatTableDataSource(this.arraySalesMeses);
-      this.dataSource.paginator = this.paginator;
-    }
-
-    if ($event == 'Septiembre') {
-      console.log("MES DE MARZO")
-      this.arraySalesMeses = _.filter(this.arraySales, ['month', 'Septiembre'])
-      console.log("🚀 ~ file: sale.component.ts ~ line 77 ~ SaleComponent ~ filtro ~ this.arraySales", this.arraySalesMeses)
-      this.dataSource = new MatTableDataSource(this.arraySalesMeses);
-      this.dataSource.paginator = this.paginator;
-    }
-
-    if ($event == 'Octubre') {
-      console.log("MES DE MARZO")
-      this.arraySalesMeses = _.filter(this.arraySales, ['month', 'Octubre'])
-      console.log("🚀 ~ file: sale.component.ts ~ line 77 ~ SaleComponent ~ filtro ~ this.arraySales", this.arraySalesMeses)
-      this.dataSource = new MatTableDataSource(this.arraySalesMeses);
-      this.dataSource.paginator = this.paginator;
-    }
-
-    if ($event == 'Noviembre') {
-      console.log("MES DE MARZO")
-      this.arraySalesMeses = _.filter(this.arraySales, ['month', 'Noviembre'])
-      console.log("🚀 ~ file: sale.component.ts ~ line 77 ~ SaleComponent ~ filtro ~ this.arraySales", this.arraySalesMeses)
-      this.dataSource = new MatTableDataSource(this.arraySalesMeses);
-      this.dataSource.paginator = this.paginator;
-    }
-
-    if ($event == 'Diciembre') {
-      console.log("MES DE MARZO")
-      this.arraySalesMeses = _.filter(this.arraySales, ['month', 'Diciembre'])
-      console.log("🚀 ~ file: sale.component.ts ~ line 77 ~ SaleComponent ~ filtro ~ this.arraySales", this.arraySalesMeses)
-      this.dataSource = new MatTableDataSource(this.arraySalesMeses);
-      this.dataSource.paginator = this.paginator;
-    }
-
+  //Filter year
+  filterYear($event) {
+    this.yearSelect = parseInt($event)
+    console.log('Anio aselect', this.yearSelect)
+    this.arraySalesYear = _.filter(this.arraySales, ['year', this.yearSelect])
+    this.dataSource = new MatTableDataSource(this.arraySalesYear);
+    this.dataSource.paginator = this.paginator;
   }
 
 
-  deleteSale(id) {
-    this.salesService.deleteSale(id).subscribe((res) => {
-      console.log("eliminado", res)
-      this.getSales()
+  //Delere Sale for id of sale
+  deleteSale(id, titleSale) {
+    this.salesService.deleteSale(id).subscribe({
+      next: (res) => {
+        this._snackBar.open("Venta " + titleSale + " eliminada", "Cerrar", {
+          duration: 3000,
+        });
+        this.getSales()
+      },
+
+      error: (err) => {
+        console.log(err)
+        this._snackBar.open("Error al eliminar venta " + titleSale, "Cerrar", {
+          duration: 3000,
+        });
+      }
     })
   }
-  getTotalCostMonth() {
-    // console.log("ARRAY", this.arraySalesMeses)
-    this.totalVentas = this.arraySalesMeses.map(t => t.total).reduce((acc, value) => acc + value, 0);
+
+
+  //Get cost total for year of sale
+  getTotalYear() {
+    this.totalVentas = 0
+    this.totalVentas = this.arraySalesYear.map(t => t.total).reduce((acc, value) => acc + value, 0);
+    // console.log("🚀 ~ file: sale.component.ts ~ line 344 ~ SaleComponent ~ getTotalCost ~ this.totalVentas", this.totalVentas)
+
     return this.totalVentas;
   }
 
-  getTotalCost() {
-    this.totalVentas = this.arraySales.map(t => t.total).reduce((acc, value) => acc + value, 0);
-    return this.totalVentas;
+  //Refresh method filtroYear
+  setIntrvl() {
+    // console.log("EJECUTNDO LALA")
+    setTimeout(() => this.filterYear(this.yearSelect), 200);
   }
-
-
 
 }

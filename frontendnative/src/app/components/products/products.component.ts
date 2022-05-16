@@ -1,10 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ProductsService } from 'src/app/services/products/products.service';
-import {MatPaginator} from '@angular/material/paginator';
-import {MatTableDataSource} from '@angular/material/table';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
 import { Product } from 'src/app/interfaces/Product';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ModalEditProductComponent } from '../modal-edit-product/modal-edit-product.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 
 @Component({
@@ -19,13 +20,14 @@ export class ProductsComponent implements OnInit {
   dialogEditCategoria: MatDialogRef<ModalEditProductComponent>;
 
 
-  displayedColumns: string[] = [ 'image','title', 'category', 'price', 'stock', 'opciones'];
+  displayedColumns: string[] = ['image', 'title', 'category', 'price', 'stock', 'opciones'];
   arregloProductos: Product[] = [];
   dataSource;
 
   constructor(
-    public productsService:ProductsService,
-    private dialog: MatDialog
+    public productsService: ProductsService,
+    private dialog: MatDialog,
+    private _snackBar: MatSnackBar
   ) { }
 
   ngOnInit(): void {
@@ -38,26 +40,36 @@ export class ProductsComponent implements OnInit {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  
-  getProducts(){
-    this.productsService.getProducts().subscribe(res=>{
-      console.log("products",res)
+
+  getProducts() {
+    this.productsService.getProducts().subscribe(res => {
+      console.log("products", res)
       this.arregloProductos = res;
       this.dataSource = new MatTableDataSource(this.arregloProductos);
       this.dataSource.paginator = this.paginator;
     })
   }
 
-  
-  deleteProduct(idProduct:string){
-    this.productsService.deleteProduct(idProduct).subscribe((res)=>{
-      console.log("eliminar Prouct", res)
-      this.getProducts()
+
+  deleteProduct(idProduct: string, titleProduct) {
+    this.productsService.deleteProduct(idProduct).subscribe({
+      next: (res) => {
+        console.log(res);
+        this.getProducts()
+        this._snackBar.open("Producto " + titleProduct + " eliminado" , "Cerrar", {
+          duration: 3000,
+        });
+      },
+
+      error: (e) => {
+        console.log(e)
+      }
     })
   }
 
 
-  ModalEditCategory(id, title, category, description, price, stock){
+  ModalEditProduct(id, title, category, description, price, stock) {
+    console.log("category", category)
     this.dialogEditCategoria = this.dialog.open(ModalEditProductComponent, {
       data: {
         idProduct: id,
@@ -69,7 +81,7 @@ export class ProductsComponent implements OnInit {
         // img: img
       }
     });
-    this.dialogEditCategoria.afterClosed().subscribe(()=> {
+    this.dialogEditCategoria.afterClosed().subscribe(() => {
       this.getProducts();
     });
 

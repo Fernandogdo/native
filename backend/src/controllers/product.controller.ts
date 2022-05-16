@@ -5,13 +5,14 @@ import fs from 'fs-extra';
 // import { setTokenSourceMapRange } from 'typescript';
 
 export async function getProducts(req:Request, res:Response): Promise<Response>{
-    const categories = await Product.find();
-    return res.json(categories)
+    const products = await Product.find()
+                                    .populate('category', 'title')
+    return res.json(products)
 }
 
 export async function getProduct(req:Request, res:Response): Promise<Response>{
     const { id } = req.params
-    const product = await Product.findById(id)
+    const product = await Product.findById(id).populate('category', 'title')
     // console.log(req.params.id)
     return res.json(product)
 }

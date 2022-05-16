@@ -1,4 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { UsersService } from 'src/app/services/users/users.service';
+
+
+
 
 @Component({
   selector: 'app-body',
@@ -11,7 +15,9 @@ export class BodyComponent implements OnInit {
   @Input() screenWidth = 0;
 
 
-  constructor() { }
+  constructor(
+    private usersService:UsersService,
+  ) { }
 
   ngOnInit(): void {
   }
@@ -24,6 +30,12 @@ export class BodyComponent implements OnInit {
       styleClass = 'body-md-screen'
     }
     return styleClass
+  }
+
+
+
+  logOut(){
+    this.usersService.logOut()
   }
 
 }

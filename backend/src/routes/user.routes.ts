@@ -9,7 +9,10 @@ import { getUsers, getUser, createuser, deleteUser, updateduser } from "../contr
 import multer from '../libs/multer'
 
 router.route('/users')
-    .get(validateJWT, getUsers)
+    .get(
+        validateJWT,
+        getUsers
+    )
     .post(
         [
             check('name', 'The name es required').not().isEmpty(),
@@ -35,7 +38,7 @@ router.route('/users/:id')
     .delete(
         validateJWT,
         deleteUser
-        )
+    )
 
 
 export default router;

@@ -4,6 +4,7 @@ export interface Sale{
     description: string;
     date: Date,
     month: string,
+    year: number,
     total: number,
     products: string
     imagePath: string;

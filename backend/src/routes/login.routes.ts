@@ -1,9 +1,9 @@
 import { Router } from "express";
 const router = Router()
-
 const { check } = require('express-validator')
 import validateFields  from "../middlewares/validate-fields";
-import {  login } from "../controllers/auth.controller";
+import {  login, renewToken} from "../controllers/auth.controller";
+import { validateJWT } from "../middlewares/validate-jwt";
 
 router.route('/login')
     .post(
@@ -15,17 +15,8 @@ router.route('/login')
         login
     );
 
-// router.route('/users/:id')
-//     .get(getUser)
-//     .delete(deleteuser)
-//     .put(
-//         [
-//             check('name', 'The name es required').not().isEmpty(),
-//             check('email', 'The email is required').isEmail(),
-//             check('role', 'The role is required').isEmail(),
-//             validateFields
-//         ], 
-//         updateduser
-//         )
+router.route('/renew')
+    .get(validateJWT, renewToken)
+    
 
 export default router;

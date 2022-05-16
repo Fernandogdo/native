@@ -31,7 +31,7 @@
                         <!-- Category Column -->
                         <ng-container matColumnDef="category">
                             <th mat-header-cell *matHeaderCellDef> Categoria </th>
-                            <td mat-cell *matCellDef="let element"> {{element.category}} </td>
+                            <td mat-cell *matCellDef="let element"> {{element.category.title}} </td>
                         </ng-container>
 
                         <!-- Price Column -->
@@ -55,11 +55,11 @@
                                     <mat-icon>settings</mat-icon>
                                 </button>
                                 <mat-menu #menu="matMenu">
-                                    <button mat-menu-item (click)="ModalEditCategory(element._id, element.title, element.category, element.description, element.price, element.stock)">
+                                    <button mat-menu-item (click)="ModalEditProduct(element._id, element.title, element.category, element.description, element.price, element.stock)">
                                         <mat-icon>edit</mat-icon>
                                         <span>Editar</span>
                                     </button>
-                                    <button mat-menu-item (click)="deleteProduct(element._id)">
+                                    <button mat-menu-item (click)="deleteProduct(element._id, element.title)">
                                         <mat-icon>delete</mat-icon>
                                         <span>Eliminar</span>
                                     </button>

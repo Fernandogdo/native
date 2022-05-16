@@ -18,13 +18,21 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-  }
+}
 
+#imageSelected {
+    cursor: pointer;
+}
 
-.input-formulario{
+#imageSelected:hover {
+    border: 1px solid #333;
+}
+
+.input-formulario {
     width: 100%;
 }
 
-.botones{
-    background: #6f6e6e;
+.btn-save{
+    margin: 15px;
 }
+

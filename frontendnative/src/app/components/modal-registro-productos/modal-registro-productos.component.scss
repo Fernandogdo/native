@@ -10,21 +10,36 @@
 }
 
 .example-header-image {
-    background-image: url("https://material.angular.io/assets/img/examples/shiba1.jpg");
+    background-image: url("../../../assets/img/native.jpeg");
     background-size: cover;
+}
+
+
+#imageSelected {
+    cursor: pointer;
+    
+}
+
+#imageSelected:hover {
+    border: 1px solid #333;
+}
+
+#imageSelected {
+    max-width: 80%;
+    max-height: 50%;
+    margin-bottom: 15px;
 }
 
 :host {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-  }
+}
 
-
-.input-formulario{
+.input-formulario {
     width: 100%;
 }
 
-.botones{
-    background: #6f6e6e;
+.btn-save {
+    margin: 15px;
 }

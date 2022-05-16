@@ -16,15 +16,17 @@
                 </div>
             </div>
 
-            <div class="col-lg-3 col-md-6 col-sm-6" *ngFor="let category of categorias" [routerLink]="['/view-products-category/', category.title ]" routerLinkActive="active">
-                <mat-card  class="card-" >
+            <div class="col-lg-3 col-md-6 col-sm-6" *ngFor="let category of categorias">
+                <mat-card class="example-card">
                     <mat-card-header>
                         <div mat-card-avatar class="example-header-image"></div>
                         <mat-card-title>{{category.title}}</mat-card-title>
                         <mat-card-subtitle>Dog Breed</mat-card-subtitle>
                     </mat-card-header>
                     <!-- <img class="image-product" [src]="'http://localhost:3000/'+ category.imagePath" alt=""> -->
-                    <img class="img-category" mat-card-image [src]="'http://localhost:3000/'+ category.imagePath" alt="Photo of a Shiba Inu">
+                    <img class="img-category" mat-card-image [src]="'http://localhost:3000/'+ category.imagePath"
+                        alt="Photo of a Shiba Inu" [routerLink]="['/view-products-category/', category._id ]"
+                        routerLinkActive="active">
                     <mat-card-content>
                         <p>
                             {{category.description}}
@@ -46,12 +48,12 @@
                             <!-- edit -->
                         </button>
                         <button mat-fab class="botones" id="btn-visibility"
-                            [routerLink]="['/view-products-category/', category.title ]" routerLinkActive="active">
+                            [routerLink]="['/view-products-category/', category._id ]" routerLinkActive="active">
                             <mat-icon>
                                 visibility
                             </mat-icon>
                         </button>
-                        <button mat-fab class="botones" color="warn" (click)="deleteCategory(category._id)">
+                        <button mat-fab class="botones" color="warn" (click)="deleteCategory(category._id, category.title)">
                             <span class="material-icons">
                                 delete
                             </span>

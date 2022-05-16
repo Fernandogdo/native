@@ -7,6 +7,7 @@ import { ProductsService } from 'src/app/services/products/products.service';
 import { SalesService } from 'src/app/services/sales/sales.service';
 import { FormBuilder, FormGroup, FormArray, FormControl, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register-sale',
@@ -37,6 +38,7 @@ export class RegisterSaleComponent implements OnInit {
   imageProduct: string;
   productsOriginal;
   disabled: boolean = false
+  disabledQuantity: boolean = true
 
   orderForm: FormGroup;
   items: FormArray;
@@ -46,6 +48,7 @@ export class RegisterSaleComponent implements OnInit {
     private productsService: ProductsService,
     // private formBuilder: FormBuilder,
     private _snackBar: MatSnackBar,
+    public router: Router
   ) { }
 
   ngOnInit(): void {
@@ -69,6 +72,7 @@ export class RegisterSaleComponent implements OnInit {
 
   myChange($event) {
     console.log($event);
+    this.disabledQuantity = false
     this.productsService.getProduct(this.opcionSeleccionada).subscribe((res) => {
       this.product = res
       this.productName = this.product.title
@@ -89,13 +93,17 @@ export class RegisterSaleComponent implements OnInit {
 
   addProduct(cantidad: number) {
     this.cantidad = cantidad
+
+    let cont = 2
     const product = {
+      id: Math.floor(Math.random() * (1 + 100000)),
       title: this.productName,
       price: this.price,
       quantity: cantidad
     }
     this.Products.push(product)
     this.disabled = true;
+
     console.log("arrayProducts", this.Products)
 
 
@@ -108,8 +116,19 @@ export class RegisterSaleComponent implements OnInit {
         this._snackBar.open("La cantidad " + productSale.quantity + " sobrepasa el stock disponible " + productOriginal.stock, "Cerrar", {
           duration: 2000,
         });
+        this.Products = this.Products.filter((item) => item.id !== productSale.title)
+        console.log("🚀 ~ file: register-sale.component.ts ~ line 112 ~ RegisterSaleComponent ~ this.Products.forEach ~ this.Products", this.Products)
+      }
+
+      if (productSale.quantity < 1) {
+        console.log("NO ESTA EN EL RNGO")
+        this._snackBar.open("Debe ingresar una cantidad mayor a 0 ", "Cerrar", {
+          duration: 2000,
+        });
         this.Products = this.Products.filter((item) => item.title !== productSale.title)
 
+        // this.Products = this.Products.filter((item) => item.title !== productSale.title)
+        console.log("🚀 ~ file: register-sale.component.ts ~ line 112 ~ RegisterSaleComponent ~ this.Products.forEach ~ this.Products", this.Products)
       }
     })
 
@@ -130,7 +149,7 @@ export class RegisterSaleComponent implements OnInit {
 
       if (productOriginal.title == productSale.title && productOriginal.stock == productSale.stock) return
 
-      console.log("saleProduct", productOriginal.title, productOriginal._id)
+      console.log("saleProduct", productOriginal.title, productOriginal.category)
 
       this.stock = productOriginal.stock - productSale.quantity
 
@@ -156,9 +175,9 @@ export class RegisterSaleComponent implements OnInit {
   }
 
 
-  deleteElementProducts(title, price, quantity) {
-    console.log("titie", title)
-    this.Products = this.Products.filter((item) => item.title !== title)
+  deleteElementProducts(id) {
+    console.log("titie", id)
+    this.Products = this.Products.filter((item) => item.id !== id)
     console.log("arrayProductsdelre", this.Products)
 
     this.dataSource = new MatTableDataSource(this.Products);
@@ -170,12 +189,16 @@ export class RegisterSaleComponent implements OnInit {
 
   postSale() {
     let now = new Date();
+    let year = new Date().getFullYear();
+    // console.log("🚀 ~ file: register-sale.component.ts ~ line 174 ~ RegisterSaleComponent ~ postSale ~ year", year)
+
+
     let month = now.toLocaleString("es-ES", { month: "long" })
     console.log("date", now.toLocaleString("es-ES", { month: "long" }))
     month.charAt(0).toUpperCase() + month.slice(1);
 
     month = month.charAt(0).toUpperCase() + month.slice(1)
-    console.log("MESTRANS", month)
+    // console.log("MESTRANS", month)
 
     const sale = {
       title: this.title,
@@ -183,15 +206,36 @@ export class RegisterSaleComponent implements OnInit {
       date: now,
       month: month,
       total: this.totalVentas,
+      year: year,
       products: this.Products
     }
 
     // console.log("🚀 ~ file: register-sale.component.ts ~ line 148 ~ RegisterSaleComponent ~ postSale ~ sale", sale)
 
-    this.salesService.createSale(sale).subscribe((res) => {
-      console.log(res);
-    })
-    this.editProduct()
-    // this.salesService.createSale()
+    if (this.title && this.description) {
+      console.log("titlwe Existe y descripton")
+      this.salesService.createSale(sale).subscribe({
+
+        next: (res) => {
+          this._snackBar.open("Venta registrada con exito!", "Cerrar", {
+            duration: 3000,
+          });
+          this.router.navigate(['/sale']);
+
+          this.editProduct()
+        },
+
+        error: (err) => {
+          console.log("error", err)
+        }
+      })
+
+    } else {
+      this._snackBar.open("Ingrese todos los datos", "Cerrar", {
+        duration: 2000,
+      });
+    }
+
+
   }
 }
